@@ -1,0 +1,45 @@
+name: VelocityKits
+version: '${project.version}'
+main: dev.manere.velocitykits.VelocityKits
+api-version: '1.19'
+permissions:
+  velocity.staff:
+    default: op
+
+commands:
+  kit:
+    aliases:
+      - k
+  kitroom:
+    aliases:
+      - virtualkitroom
+  kitroomadmin:
+    permission: velocity.staff
+  deletekit:
+    permission: velocity.staff
+  premadekit:
+    # Empty
+  kit1:
+    aliases:
+      - k1
+  kit2:
+    aliases:
+      - k2
+  kit3:
+    aliases:
+      - k3
+  kit4:
+    aliases:
+      - k4
+  kit5:
+    aliases:
+      - k5
+  kit6:
+    aliases:
+      - k6
+  kit7:
+    aliases:
+      - k7
+  kit8:
+    aliases:
+      - k8
