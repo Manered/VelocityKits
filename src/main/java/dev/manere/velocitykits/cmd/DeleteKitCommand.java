@@ -1,8 +1,7 @@
 package dev.manere.velocitykits.cmd;
 
-import dev.manere.utils.server.ServerUtils;
-import dev.manere.utils.text.color.ColorUtils;
-import dev.manere.utils.world.WorldUtils;
+import dev.manere.utils.server.Servers;
+import dev.manere.utils.text.color.TextStyle;
 import dev.manere.velocitykits.storage.kit.Kit;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -21,14 +20,14 @@ public class DeleteKitCommand implements CommandExecutor, CommandInfo, TabComple
 
     @Override
     public boolean help(String label, Player player) {
-        player.sendMessage(ColorUtils.color("<#ff0000>Correct Usage: /deletekit <kit_number> <player>"));
+        player.sendMessage(TextStyle.color("<#ff0000>Correct Usage: /deletekit <kit_number> <player>"));
         return true;
     }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
         if (!(sender instanceof Player player)) {
-            sender.sendMessage(ColorUtils.color("<#ff0000>Only player's can execute this command."));
+            sender.sendMessage(TextStyle.color("<#ff0000>Only player's can execute this command."));
             return true;
         }
 
@@ -43,12 +42,12 @@ public class DeleteKitCommand implements CommandExecutor, CommandInfo, TabComple
         try {
             kitNumber = Integer.parseInt(kit);
         } catch (NumberFormatException e) {
-            player.sendMessage(ColorUtils.color("<#ff0000>Invalid kit number. Can only be 1-8."));
+            player.sendMessage(TextStyle.color("<#ff0000>Invalid kit number. Can only be 1-8."));
             return true;
         }
 
         if (kitNumber > 8) {
-            player.sendMessage(ColorUtils.color("<#ff0000>Invalid kit number. Can only be 1-8."));
+            player.sendMessage(TextStyle.color("<#ff0000>Invalid kit number. Can only be 1-8."));
             return true;
         }
 
@@ -56,7 +55,7 @@ public class DeleteKitCommand implements CommandExecutor, CommandInfo, TabComple
         OfflinePlayer target = Bukkit.getOfflinePlayer(targetName);
 
         if (!target.hasPlayedBefore()) {
-            player.sendMessage(ColorUtils.color("<#ff0000>Player not found."));
+            player.sendMessage(TextStyle.color("<#ff0000>Player not found."));
             return true;
         }
 
@@ -69,13 +68,13 @@ public class DeleteKitCommand implements CommandExecutor, CommandInfo, TabComple
         });
 
         if (contentsEmpty[0]) {
-            player.sendMessage(ColorUtils.color("<#ff0000>That player doesn't have a kit under kit number <number>."
+            player.sendMessage(TextStyle.color("<#ff0000>That player doesn't have a kit under kit number <number>."
                     .replaceAll("<number>", kit)));
             return true;
         }
 
         Kit.delete(String.valueOf(target.getUniqueId()), kitNumber);
-        player.sendMessage(ColorUtils.color("<#00ff00>The kit has been deleted."));
+        player.sendMessage(TextStyle.color("<#00ff00>The kit has been deleted."));
 
         return true;
     }
@@ -87,7 +86,7 @@ public class DeleteKitCommand implements CommandExecutor, CommandInfo, TabComple
         }
 
         if (args.length == 2) {
-            return ServerUtils.online()
+            return Servers.online()
                     .stream()
                     .map(Player::getName)
                     .collect(Collectors.toList());

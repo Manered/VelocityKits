@@ -1,9 +1,8 @@
 package dev.manere.velocitykits.menu;
 
 import dev.manere.utils.item.ItemBuilder;
-import dev.manere.utils.menu.MenuButton;
-import dev.manere.utils.menu.normal.NormalMenuBuilder;
-import dev.manere.utils.text.color.ColorUtils;
+import dev.manere.utils.menu.Button;
+import dev.manere.utils.text.color.TextStyle;
 import dev.manere.velocitykits.menu.editing.KitEditorMenu;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -18,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("BukkitListenerImplemented")
 public interface Menu<T extends InventoryHolder> {
     default void open(Player player) {
-        NormalMenuBuilder builder = (NormalMenuBuilder) builder();
+        dev.manere.utils.menu.normal.Menu builder = (dev.manere.utils.menu.normal.Menu) builder();
         builder.open(player);
     }
 
@@ -29,8 +28,8 @@ public interface Menu<T extends InventoryHolder> {
 
     T builder();
 
-    default void button(int slot, MenuButton button) {
-        NormalMenuBuilder builder = (NormalMenuBuilder) builder();
+    default void button(int slot, Button button) {
+        dev.manere.utils.menu.normal.Menu builder = (dev.manere.utils.menu.normal.Menu) builder();
         builder.button(slot, button);
     }
 
@@ -43,12 +42,12 @@ public interface Menu<T extends InventoryHolder> {
     }
 
     default void kit(int slot, String kitName, String commands, int number) {
-        button(slot, MenuButton.of()
-                .item(ItemBuilder.of(Material.END_CRYSTAL)
-                        .name(ColorUtils.color(kitName))
-                        .lore(ColorUtils.color(" <white>LMB to load, "),
-                                ColorUtils.color(" <white>RMB to edit. "),
-                                ColorUtils.color(" "), ColorUtils.color(commands)))
+        button(slot, Button.button()
+                .item(ItemBuilder.item(Material.END_CRYSTAL)
+                        .name(TextStyle.color(kitName))
+                        .lore(TextStyle.color(" <white>LMB to load, "),
+                                TextStyle.color(" <white>RMB to edit. "),
+                                TextStyle.color(" "), TextStyle.color(commands)))
                 .onClick(event -> {
                     Player player = (Player) event.getWhoClicked();
                     event.setCancelled(true);

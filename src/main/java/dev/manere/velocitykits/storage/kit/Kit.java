@@ -1,11 +1,11 @@
 package dev.manere.velocitykits.storage.kit;
 
-import dev.manere.utils.base64.Base64Utils;
 import dev.manere.utils.library.Utils;
 import dev.manere.utils.scheduler.Schedulers;
-import dev.manere.utils.storage.sql.connection.SQLConnector;
-import dev.manere.utils.storage.sql.enums.PrimaryColumn;
-import dev.manere.utils.text.color.ColorUtils;
+import dev.manere.utils.serializers.Serializers;
+import dev.manere.utils.sql.connection.SQLConnector;
+import dev.manere.utils.sql.enums.PrimaryColumn;
+import dev.manere.utils.text.color.TextStyle;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -24,11 +24,11 @@ public class Kit {
     public static void of() {
         connection = SQLConnector.of()
                 .authentication()
-                .host(Utils.getPlugin().getConfig().getString("sql.host"))
-                .port(Utils.getPlugin().getConfig().getInt("sql.port"))
-                .username(Utils.getPlugin().getConfig().getString("sql.username"))
-                .password(Utils.getPlugin().getConfig().getString("sql.password"))
-                .database(Utils.getPlugin().getConfig().getString("sql.database"))
+                .host(Utils.plugin().getConfig().getString("sql.host"))
+                .port(Utils.plugin().getConfig().getInt("sql.port"))
+                .username(Utils.plugin().getConfig().getString("sql.username"))
+                .password(Utils.plugin().getConfig().getString("sql.password"))
+                .database(Utils.plugin().getConfig().getString("sql.database"))
                 .build()
                 .connect();
 
@@ -59,16 +59,16 @@ public class Kit {
     }
 
     public static void contentsAsync(Player player, int kitNumber, Consumer<Map<Integer, ItemStack>> callback) {
-        Schedulers.async().now(() -> {
+        Schedulers.async().execute(() -> {
             Map<Integer, ItemStack> kitContents = contents(player.getUniqueId().toString(), kitNumber);
-            Schedulers.sync().now(() -> callback.accept(kitContents));
+            Schedulers.sync().execute(() -> callback.accept(kitContents));
         });
     }
 
     public static void contentsAsync(String playerUUID, int kitNumber, Consumer<Map<Integer, ItemStack>> callback) {
-        Schedulers.async().now(() -> {
+        Schedulers.async().execute(() -> {
             Map<Integer, ItemStack> kitContents = contents(playerUUID, kitNumber);
-            Schedulers.sync().now(() -> callback.accept(kitContents));
+            Schedulers.sync().execute(() -> callback.accept(kitContents));
         });
     }
 
@@ -83,7 +83,7 @@ public class Kit {
 
                 if (rs.next()) {
                     String data = rs.getString("contents");
-                    return Base64Utils.deserializeItemStacks(data);
+                    return Serializers.base64().deserializeItemStackMap(data);
                 }
             }
         } catch (SQLException e) {
@@ -106,11 +106,11 @@ public class Kit {
 
         contentsAsync(player, kitNumber, contents -> {
             if (contents.isEmpty()) {
-                player.sendActionBar(ColorUtils.color("<#ff0000>That kit is empty!"));
+                player.sendActionBar(TextStyle.color("<#ff0000>That kit is empty!"));
                 return;
             }
 
-            player.sendActionBar(ColorUtils.color("<#00ff00>Kit <number> has been loaded."
+            player.sendActionBar(TextStyle.color("<#00ff00>Kit <number> has been loaded."
                     .replaceAll("<number>", String.valueOf(kitNumber))));
 
             for (Map.Entry<Integer, ItemStack> entry : contents.entrySet()) {
@@ -127,12 +127,12 @@ public class Kit {
     }
 
     public static void saveAsync(Player player, int kitNumber, Map<Integer, ItemStack> contents) {
-        Schedulers.async().now(task -> save(String.valueOf(player.getUniqueId()), kitNumber, contents));
+        Schedulers.async().execute(task -> save(String.valueOf(player.getUniqueId()), kitNumber, contents));
     }
 
     public static void save(String playerUUID, int kitNumber, Map<Integer, ItemStack> contents) {
         try {
-            String data = Base64Utils.serializeItemStacks(contents);
+            String data = Serializers.base64().serializeItemStacks(contents);
 
             try (PreparedStatement stmt = connection.prepareStatement(
                     "INSERT INTO velocity_kits " +

@@ -1,7 +1,6 @@
 package dev.manere.velocitykits.cmd;
 
-import dev.manere.utils.text.color.ColorUtils;
-import dev.manere.utils.world.WorldUtils;
+import dev.manere.utils.text.color.TextStyle;
 import dev.manere.velocitykits.menu.KitRoomAdminMenu;
 import dev.manere.velocitykits.storage.room.KitRoom;
 import dev.manere.velocitykits.storage.room.KitRoomCategory;
@@ -20,7 +19,7 @@ public class KitRoomAdminCommand implements CommandExecutor, CommandInfo, TabCom
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
         if (!(sender instanceof Player player)) {
-            sender.sendMessage(ColorUtils.color("<#ff0000>Only player's can execute this command."));
+            sender.sendMessage(TextStyle.color("<#ff0000>Only player's can execute this command."));
             return true;
         }
 
@@ -38,14 +37,14 @@ public class KitRoomAdminCommand implements CommandExecutor, CommandInfo, TabCom
                 .equalsIgnoreCase(category));
 
         if (!categoryExists) {
-            player.sendMessage(ColorUtils.color("<#ff0000>Category not found."));
+            player.sendMessage(TextStyle.color("<#ff0000>Category not found."));
             return true;
         }
 
         switch (action.toLowerCase()) {
             case "clear" -> {
                 KitRoom.clear(KitRoomCategory.valueOf(category.toUpperCase()));
-                player.sendMessage(ColorUtils.color("<#00ff00>Cleared all items for category <white><category> <#00ff00>successfully!"
+                player.sendMessage(TextStyle.color("<#00ff00>Cleared all items for category <white><category> <#00ff00>successfully!"
                         .replaceAll("<category>", category)));
                 return true;
             }
@@ -63,7 +62,7 @@ public class KitRoomAdminCommand implements CommandExecutor, CommandInfo, TabCom
 
     @Override
     public boolean help(String label, Player player) {
-        player.sendMessage(ColorUtils.color("<#ff0000>Correct Usage: /<label> <category> <action>"
+        player.sendMessage(TextStyle.color("<#ff0000>Correct Usage: /<label> <category> <action>"
                 .replaceAll("<label>", label)));
         return true;
     }

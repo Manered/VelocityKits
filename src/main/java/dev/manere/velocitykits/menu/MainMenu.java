@@ -1,9 +1,8 @@
 package dev.manere.velocitykits.menu;
 
 import dev.manere.utils.item.ItemBuilder;
-import dev.manere.utils.menu.MenuButton;
-import dev.manere.utils.menu.normal.NormalMenuBuilder;
-import dev.manere.utils.text.color.ColorUtils;
+import dev.manere.utils.menu.Button;
+import dev.manere.utils.text.color.TextStyle;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -12,11 +11,11 @@ import org.bukkit.inventory.ItemFlag;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainMenu implements Menu<NormalMenuBuilder> {
-    private final NormalMenuBuilder menuBuilder;
+public class MainMenu implements Menu<dev.manere.utils.menu.normal.Menu> {
+    private final dev.manere.utils.menu.normal.Menu menuBuilder;
 
     public MainMenu() {
-        this.menuBuilder = NormalMenuBuilder.of(ColorUtils.color("Kits"), 54);
+        this.menuBuilder = dev.manere.utils.menu.normal.Menu.menu(TextStyle.color("Kits"), 54);
 
         init();
     }
@@ -37,35 +36,35 @@ public class MainMenu implements Menu<NormalMenuBuilder> {
         ));
 
         border.forEach(slot -> {
-            if (this.menuBuilder.getButton(slot) == null) {
-                button(slot, MenuButton.of()
-                        .item(ItemBuilder.of(Material.BLACK_STAINED_GLASS_PANE)
-                                .name(ColorUtils.color(" ")))
+            if (this.menuBuilder.button(slot) == null) {
+                button(slot, Button.button()
+                        .item(ItemBuilder.item(Material.BLACK_STAINED_GLASS_PANE)
+                                .name(TextStyle.color(" ")))
                         .onClick(event -> event.setCancelled(true)));
             }
         });
 
         List<Component> virtualKitRoomLore = new ArrayList<>();
-        virtualKitRoomLore.add(ColorUtils.color(" <white>Opens a menu with "));
-        virtualKitRoomLore.add(ColorUtils.color(" <white>items related to PvP. "));
-        virtualKitRoomLore.add(ColorUtils.color(" "));
-        virtualKitRoomLore.add(ColorUtils.color("<#91bdfa>/kitroom"));
+        virtualKitRoomLore.add(TextStyle.color(" <white>Opens a menu with "));
+        virtualKitRoomLore.add(TextStyle.color(" <white>items related to PvP. "));
+        virtualKitRoomLore.add(TextStyle.color(" "));
+        virtualKitRoomLore.add(TextStyle.color("<#91bdfa>/kitroom"));
 
         List<Component> helpLore = new ArrayList<>();
-        helpLore.add(ColorUtils.color(" <white>For items, you can use the Virtual Kit Room, "));
-        helpLore.add(ColorUtils.color(" <white>After you've got your items click on "));
-        helpLore.add(ColorUtils.color(" <white>any (best to have it on kit 1) end crystal "));
-        helpLore.add(ColorUtils.color(" <white>(which represents a kit), and then click "));
-        helpLore.add(ColorUtils.color(" <white>'Import Inventory' and finally close out "));
-        helpLore.add(ColorUtils.color(" <white>of your inventory to save it. "));
-        helpLore.add(ColorUtils.color(""));
-        helpLore.add(ColorUtils.color("<#91bdfa>Join our discord (/discord)"));
-        helpLore.add(ColorUtils.color("<#91bdfa>if you find any issues."));
+        helpLore.add(TextStyle.color(" <white>For items, you can use the Virtual Kit Room, "));
+        helpLore.add(TextStyle.color(" <white>After you've got your items click on "));
+        helpLore.add(TextStyle.color(" <white>any (best to have it on kit 1) end crystal "));
+        helpLore.add(TextStyle.color(" <white>(which represents a kit), and then click "));
+        helpLore.add(TextStyle.color(" <white>'Import Inventory' and finally close out "));
+        helpLore.add(TextStyle.color(" <white>of your inventory to save it. "));
+        helpLore.add(TextStyle.color(""));
+        helpLore.add(TextStyle.color("<#91bdfa>Join our discord (/discord)"));
+        helpLore.add(TextStyle.color("<#91bdfa>if you find any issues."));
 
-        button(46, MenuButton.of()
-                .item(ItemBuilder.of(Material.WRITABLE_BOOK)
-                        .name(ColorUtils.color("<#579af7>Premade Kit"))
-                        .lore(ColorUtils.color("<#91bdfa>/premadekit")))
+        button(46, Button.button()
+                .item(ItemBuilder.item(Material.WRITABLE_BOOK)
+                        .name(TextStyle.color("<#579af7>Premade Kit"))
+                        .lore(TextStyle.color("<#91bdfa>/premadekit")))
                 .onClick(event -> {
                     event.setCancelled(true);
 
@@ -74,9 +73,9 @@ public class MainMenu implements Menu<NormalMenuBuilder> {
                     player.performCommand("premadekit");
                 }));
 
-        button(47, MenuButton.of()
-                .item(ItemBuilder.of(Material.MOJANG_BANNER_PATTERN)
-                        .name(ColorUtils.color("<#579af7>Virtual Kit Room"))
+        button(47, Button.button()
+                .item(ItemBuilder.item(Material.MOJANG_BANNER_PATTERN)
+                        .name(TextStyle.color("<#579af7>Virtual Kit Room"))
                         .lore(virtualKitRoomLore)
                         .addFlag(ItemFlag.HIDE_ITEM_SPECIFICS))
                 .onClick(event -> {
@@ -87,33 +86,33 @@ public class MainMenu implements Menu<NormalMenuBuilder> {
                     player.performCommand("kitroom");
                 }));
 
-        button(49, MenuButton.of()
-                .item(ItemBuilder.of(Material.SPECTRAL_ARROW)
-                        .name(ColorUtils.color("<#579af7>Help"))
+        button(49, Button.button()
+                .item(ItemBuilder.item(Material.SPECTRAL_ARROW)
+                        .name(TextStyle.color("<#579af7>Help"))
                         .lore(helpLore))
                 .onClick(event -> event.setCancelled(true)));
 
-        button(51, MenuButton.of()
-                .item(ItemBuilder.of(Material.ENDER_CHEST)
-                        .name(ColorUtils.color("<#579af7>Ender Chest Kits"))
-                        .lore(ColorUtils.color(" <white>SOON...?")))
+        button(51, Button.button()
+                .item(ItemBuilder.item(Material.ENDER_CHEST)
+                        .name(TextStyle.color("<#579af7>Ender Chest Kits"))
+                        .lore(TextStyle.color(" <white>SOON...?")))
                 .onClick(event -> event.setCancelled(true)));
 
-        button(52, MenuButton.of()
-                .item(ItemBuilder.of(Material.RED_DYE)
-                        .name(ColorUtils.color("<#579af7>Clear Inventory")))
+        button(52, Button.button()
+                .item(ItemBuilder.item(Material.RED_DYE)
+                        .name(TextStyle.color("<#579af7>Clear Inventory")))
                 .onClick(event -> {
                     event.setCancelled(true);
 
                     Player player = (Player) event.getWhoClicked();
 
                     player.getInventory().clear();
-                    player.sendActionBar(ColorUtils.color("<#00ff00>Cleared inventory."));
+                    player.sendActionBar(TextStyle.color("<#00ff00>Cleared inventory."));
                 }));
     }
 
     @Override
-    public NormalMenuBuilder builder() {
+    public dev.manere.utils.menu.normal.Menu builder() {
         return this.menuBuilder;
     }
 }

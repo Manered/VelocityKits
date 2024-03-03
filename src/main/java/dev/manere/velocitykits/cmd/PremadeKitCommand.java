@@ -1,7 +1,6 @@
 package dev.manere.velocitykits.cmd;
 
-import dev.manere.utils.text.color.ColorUtils;
-import dev.manere.utils.world.WorldUtils;
+import dev.manere.utils.text.color.TextStyle;
 import dev.manere.velocitykits.storage.premade.PremadeKit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -20,7 +19,7 @@ public class PremadeKitCommand implements CommandExecutor, CommandInfo, TabCompl
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
         if (!(sender instanceof Player player)) {
-            sender.sendMessage(ColorUtils.color("<#ff0000>Only player's can execute this command."));
+            sender.sendMessage(TextStyle.color("<#ff0000>Only player's can execute this command."));
             return true;
         }
 
@@ -36,7 +35,7 @@ public class PremadeKitCommand implements CommandExecutor, CommandInfo, TabCompl
 
         if (args.length == 0) {
             inventory.setContents(PremadeKit.contentsItemStacks().toArray(new ItemStack[0]));
-            player.sendActionBar(ColorUtils.color("<#00ff00>Premade Kit loaded."));
+            player.sendActionBar(TextStyle.color("<#00ff00>Premade Kit loaded."));
 
             return true;
         }
@@ -45,7 +44,7 @@ public class PremadeKitCommand implements CommandExecutor, CommandInfo, TabCompl
             if (args[0].equalsIgnoreCase("export")) {
                 if (player.hasPermission("velocity.staff")) {
                     PremadeKit.contentsItemStacks(Arrays.stream(inventory.getContents()).toList());
-                    player.sendActionBar(ColorUtils.color("<#00ff00>Exported successfully."));
+                    player.sendActionBar(TextStyle.color("<#00ff00>Exported successfully."));
 
                     return true;
                 } else {
@@ -62,10 +61,10 @@ public class PremadeKitCommand implements CommandExecutor, CommandInfo, TabCompl
     @Override
     public boolean help(String label, Player player) {
         if (player.hasPermission("velocity.staff")) {
-            player.sendMessage(ColorUtils.color("<#ff0000>Correct Usage: /<label> [export]"
+            player.sendMessage(TextStyle.color("<#ff0000>Correct Usage: /<label> [export]"
                     .replaceAll("<label>", label)));
         } else {
-            player.sendMessage(ColorUtils.color("<#ff0000>Correct Usage: /<label>"
+            player.sendMessage(TextStyle.color("<#ff0000>Correct Usage: /<label>"
                     .replaceAll("<label>", label)));
         }
 

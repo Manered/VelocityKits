@@ -1,8 +1,8 @@
 package dev.manere.velocitykits.storage.premade;
 
-import dev.manere.utils.base64.Base64Utils;
 import dev.manere.utils.item.ItemBuilder;
 import dev.manere.utils.library.Utils;
+import dev.manere.utils.serializers.Serializers;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
@@ -19,7 +19,7 @@ public class PremadeKit {
     }
 
     public static void of() {
-        File file = new File(Utils.getPlugin().getDataFolder(), "premade.yml");
+        File file = new File(Utils.plugin().getDataFolder(), "premade.yml");
 
         if (!file.exists()) {
             try {
@@ -42,8 +42,8 @@ public class PremadeKit {
         List<ItemBuilder> list = new ArrayList<>();
 
         for (String data : config.getStringList("contents")) {
-            ItemStack stack = Base64Utils.deserializeItemStack(data);
-            ItemBuilder itemBuilder = ItemBuilder.of(stack);
+            ItemStack stack = Serializers.base64().deserialize(data);
+            ItemBuilder itemBuilder = ItemBuilder.item(stack);
 
             list.add(itemBuilder);
         }
@@ -57,7 +57,7 @@ public class PremadeKit {
         List<ItemStack> list = new ArrayList<>();
 
         for (String data : config.getStringList("contents")) {
-            ItemStack stack = Base64Utils.deserializeItemStack(data);
+            ItemStack stack = Serializers.base64().deserialize(data);
             list.add(stack);
         }
 
@@ -69,7 +69,7 @@ public class PremadeKit {
 
         List<String> toAdd = new ArrayList<>();
         for (ItemBuilder builder : contents) {
-            String serialize = Base64Utils.serialize(builder.build());
+            String serialize = Serializers.base64().serializeItemStack(builder.build());
             toAdd.add(serialize);
         }
 
@@ -84,7 +84,7 @@ public class PremadeKit {
 
         List<ItemBuilder> builders = new ArrayList<>();
         for (ItemStack stack : contents) {
-            ItemBuilder itemBuilder = ItemBuilder.of(stack);
+            ItemBuilder itemBuilder = ItemBuilder.item(stack);
             builders.add(itemBuilder);
         }
 
@@ -93,13 +93,13 @@ public class PremadeKit {
 
     public static void save() {
         try {
-            config.save(new File(Utils.getPlugin().getDataFolder(), "premade.yml"));
+            config.save(new File(Utils.plugin().getDataFolder(), "premade.yml"));
         } catch (IOException e) {
             throw new RuntimeException();
         }
     }
 
     public static void reload() {
-        config = YamlConfiguration.loadConfiguration(new File(Utils.getPlugin().getDataFolder(), "premade.yml"));
+        config = YamlConfiguration.loadConfiguration(new File(Utils.plugin().getDataFolder(), "premade.yml"));
     }
 }

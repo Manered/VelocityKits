@@ -1,6 +1,6 @@
 package dev.manere.velocitykits.storage.kit;
 
-import dev.manere.utils.storage.sql.enums.PrimaryColumn;
+import dev.manere.utils.sql.enums.PrimaryColumn;
 
 import java.util.ArrayList;
 import java.util.List;

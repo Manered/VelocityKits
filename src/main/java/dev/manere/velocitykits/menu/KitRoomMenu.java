@@ -1,9 +1,8 @@
 package dev.manere.velocitykits.menu;
 
 import dev.manere.utils.item.ItemBuilder;
-import dev.manere.utils.menu.MenuButton;
-import dev.manere.utils.menu.normal.NormalMenuBuilder;
-import dev.manere.utils.text.color.ColorUtils;
+import dev.manere.utils.menu.Button;
+import dev.manere.utils.text.color.TextStyle;
 import dev.manere.velocitykits.storage.room.KitRoom;
 import dev.manere.velocitykits.storage.room.KitRoomCategory;
 import org.bukkit.Material;
@@ -14,19 +13,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class KitRoomMenu implements Menu<NormalMenuBuilder> {
-    private final NormalMenuBuilder menuBuilder;
+public class KitRoomMenu implements Menu<dev.manere.utils.menu.normal.Menu> {
+    private final dev.manere.utils.menu.normal.Menu menuBuilder;
     private final KitRoomCategory category;
 
     public KitRoomMenu() {
-        this.menuBuilder = NormalMenuBuilder.of(ColorUtils.color("Virtual Kit Room"), 54);
+        this.menuBuilder = dev.manere.utils.menu.normal.Menu.menu(TextStyle.color("Virtual Kit Room"), 54);
         this.category = KitRoomCategory.CRYSTAL_PVP;
 
         init();
     }
 
     public KitRoomMenu(KitRoomCategory category) {
-        this.menuBuilder = NormalMenuBuilder.of(ColorUtils.color("Virtual Kit Room"), 54);
+        this.menuBuilder = dev.manere.utils.menu.normal.Menu.menu(TextStyle.color("Virtual Kit Room"), 54);
         this.category = category;
 
         init();
@@ -40,7 +39,7 @@ public class KitRoomMenu implements Menu<NormalMenuBuilder> {
             kitContents.forEach(item -> {
                 int index = kitContents.indexOf(item);
 
-                button(index, MenuButton.of()
+                button(index, Button.button()
                         .item(item)
                         .onClick(event -> {
                             /* Do nothing */
@@ -51,17 +50,17 @@ public class KitRoomMenu implements Menu<NormalMenuBuilder> {
         List<Integer> border = new ArrayList<>(List.of(45, 53));
 
         border.forEach(slot -> {
-            if (this.menuBuilder.getButton(slot) == null) {
-                button(slot, MenuButton.of()
-                        .item(ItemBuilder.of(Material.BLACK_STAINED_GLASS_PANE)
-                                .name(ColorUtils.color(" ")))
+            if (this.menuBuilder.button(slot) == null) {
+                button(slot, Button.button()
+                        .item(ItemBuilder.item(Material.BLACK_STAINED_GLASS_PANE)
+                                .name(TextStyle.color(" ")))
                         .onClick(event -> event.setCancelled(true)));
             }
         });
 
-        Arrays.stream(KitRoomCategory.values()).forEach(categoryItem -> button(categoryItem.slot(), MenuButton.of()
-                .item(ItemBuilder.of(categoryItem.type())
-                        .name(ColorUtils.color(categoryItem.prettyName()))
+        Arrays.stream(KitRoomCategory.values()).forEach(categoryItem -> button(categoryItem.slot(), Button.button()
+                .item(ItemBuilder.item(categoryItem.type())
+                        .name(TextStyle.color(categoryItem.prettyName()))
                         .addFlag(ItemFlag.HIDE_ITEM_SPECIFICS))
                 .onClick(event -> {
                     event.setCancelled(true);
@@ -69,12 +68,12 @@ public class KitRoomMenu implements Menu<NormalMenuBuilder> {
                     Player player = (Player) event.getWhoClicked();
                     new KitRoomMenu(categoryItem).open(player);
 
-                    player.sendActionBar(ColorUtils.color(categoryItem.prettyName()));
+                    player.sendActionBar(TextStyle.color(categoryItem.prettyName()));
                 })));
     }
 
     @Override
-    public NormalMenuBuilder builder() {
+    public dev.manere.utils.menu.normal.Menu builder() {
         return this.menuBuilder;
     }
 }
